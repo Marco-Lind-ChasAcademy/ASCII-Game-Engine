@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <windows.h>
 
-#define SCREEN_WIDTH 96
+#define SCREEN_WIDTH 98
 #define SCREEN_HEIGHT 22
 #define SPRITE_PLAYER_WIDTH 6
 #define SPRITE_PLAYER_HEIGHT 3
-#define SCREEN_BUFFER_SIZE (SCREEN_WIDTH + 1) * SCREEN_HEIGHT + 2
+#define SCREEN_BUFFER_SIZE (SCREEN_WIDTH + 1) * SCREEN_HEIGHT + 1
 #define SPRITE_PLAYER_BUFFER_SIZE (SPRITE_PLAYER_WIDTH + 1) * SPRITE_PLAYER_HEIGHT
 #define NUMBER_OF_ENTITIES 2
 
@@ -32,8 +32,8 @@ typedef struct
 
 
 
-FILE *map_file;
-FILE *sprite_player_file;
+FILE *map_file = NULL;
+FILE *sprite_player_file = NULL;
 //Entity entity;
 PositionSystem pos;
 SizeSystem size = {.height = {SPRITE_PLAYER_HEIGHT}, .width = {SPRITE_PLAYER_WIDTH}};
@@ -52,6 +52,11 @@ static inline void mapPos(PositionSystem *pos_sys, int entity, int x, int y)
 static inline int keyIsPressed(char key_uppercase)
 {
     return GetAsyncKeyState(key_uppercase) & 0x8000;
+}
+
+static inline int keyWasPressed(char key_uppercase)
+{
+    return GetAsyncKeyState(key_uppercase) & 0x0001;
 }
 
 static inline int topIsReached(PositionSystem *pos, SizeSystem *size, int entity)
@@ -135,45 +140,36 @@ static inline void movePos(PositionSystem *pos_sys, SizeSystem *size, int entity
 }
 
 void drawPlayer();
+int openFile(FILE **file_pointer, char *file_name, char *mode);
+int readFile(void *__restrict__ destination_buffer, size_t element_size, int count, FILE *file_pointer);
+void drawEntity(PositionSystem *pos_sys, SizeSystem *size_sys, int entity);
 
 
 int main()
 {
-    if ((map_file = fopen("map.bin", "r")) == NULL)
+    if (!openFile(&map_file, "map.bin", "r"))
     {
-        perror("Couldn't open map.bin.");
-        system("pause");
         return 1;
     }
     
-    if ((sprite_player_file = fopen("sprite_player.bin", "r")) == NULL)
+    if (!openFile(&sprite_player_file, "sprite_player.bin", "r"))
     {
-        perror("Couldn't open sprite_player.bin.");
         fclose(map_file);
-        system("pause");
-        return 1;
-    }
-    
-    if (!fread(&map_buffer[1], 1, SCREEN_BUFFER_SIZE, map_file))
-    {
-        perror("map.bin is empty.");
-        fclose(map_file);
-        fclose(sprite_player_file);
-        system("pause");
-        return 1;
-    }
-    
-    if (!fread(sprite_player_buffer, 1, SPRITE_PLAYER_BUFFER_SIZE, sprite_player_file))
-    {
-        perror("sprite_player.bin is empty.");
-        fclose(map_file);
-        fclose(sprite_player_file);
-        system("pause");
         return 1;
     }
 
+    if
+    (
+        !readFile(&map_buffer[1], 1, SCREEN_BUFFER_SIZE, map_file) ||
+        !readFile(sprite_player_buffer, 1, SPRITE_PLAYER_BUFFER_SIZE, sprite_player_file)
+    )
+    {
+        fclose(map_file);
+        fclose(sprite_player_file);
+    }
+
     map_buffer[0] = '\n';
-    map_buffer[SCREEN_BUFFER_SIZE - 1] = '\0';
+    //map_buffer[SCREEN_BUFFER_SIZE - 1] = '\0';
     //sprite_player_buffer[SPRITE_PLAYER_BUFFER_SIZE - 1] = '\0';
     
     memcpy(screen_buffer, map_buffer, SCREEN_BUFFER_SIZE);
@@ -188,7 +184,7 @@ int main()
 
 
     // Game loop
-    while (!(GetAsyncKeyState(VK_ESCAPE) & 0x0001))
+    while (!keyWasPressed(VK_ESCAPE))
     {
         QueryPerformanceCounter(&current_time);
         delta_time = (double)(current_time.QuadPart - last_time.QuadPart) / freq.QuadPart;
@@ -201,7 +197,7 @@ int main()
         memcpy(screen_buffer, map_buffer, SCREEN_BUFFER_SIZE);
 
         // Move above the timer later. Also add velocity
-        drawPlayer();
+        drawEntity(&pos, &size, PLAYER);
         
         fwrite(screen_buffer, 1, SCREEN_BUFFER_SIZE, stdout);
 
@@ -226,5 +222,45 @@ void drawPlayer()
     {
         memcpy(&screen_buffer[screen_buffer_index], &sprite_player_buffer[sprite_player_buffer_index], SPRITE_PLAYER_WIDTH);
         sprite_player_buffer_index += SPRITE_PLAYER_WIDTH + 1;
+    }
+}
+
+int openFile(FILE **file_pointer, char *file_name, char *mode)
+{
+    if ((*file_pointer = fopen(file_name, mode)) == NULL)
+    {
+        char error_message[64];
+        sprintf(error_message, "Couldn't open %s", file_name);
+        perror(error_message);
+        system("pause");
+        return 0;
+    }
+
+    return 1;
+}
+
+int readFile(void *__restrict__ destination_buffer, size_t element_size, int count, FILE *file_pointer)
+{
+    if (!fread(destination_buffer, element_size, count, file_pointer))
+    {
+        perror("readFile() failed");
+        system("pause");
+        return 0;
+    }
+
+    return 1;
+}
+
+void drawEntity(PositionSystem *pos_sys, SizeSystem *size_sys, int entity)
+{
+    movePos(pos_sys, size_sys, entity);
+    // Top left corner
+    int screen_buffer_index = (pos.abs[entity] - *size_sys->width / 2) - (SCREEN_WIDTH + 1) * (*size_sys->height / 2);
+    int sprite_player_buffer_index = 0;
+
+    for (; sprite_player_buffer_index < ((*size_sys->width + 1) * *size_sys->height); screen_buffer_index += SCREEN_WIDTH + 1)
+    {
+        memcpy(&screen_buffer[screen_buffer_index], &sprite_player_buffer[sprite_player_buffer_index], *size_sys->width);
+        sprite_player_buffer_index += *size_sys->width + 1;
     }
 }
