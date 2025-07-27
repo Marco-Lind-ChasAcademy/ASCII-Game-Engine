@@ -1,9 +1,8 @@
 #ifndef ECS
 #define ECS
 
-#define NUMBER_OF_ENTITIES 2
-#define SPRITE_PLAYER_WIDTH 6
-#define SPRITE_PLAYER_HEIGHT 3
+#include "Config.h"
+#include "Engine.h"
 
 typedef enum
 {
@@ -14,7 +13,9 @@ typedef enum
 typedef struct
 {
     float x[NUMBER_OF_ENTITIES];
+    float x_next[NUMBER_OF_ENTITIES];
     float y[NUMBER_OF_ENTITIES];
+    float y_next[NUMBER_OF_ENTITIES];
 } PositionSystem;
 
 typedef struct
@@ -25,8 +26,10 @@ typedef struct
 
 typedef struct
 {
-    int x[NUMBER_OF_ENTITIES];
-    int y[NUMBER_OF_ENTITIES];
+    float x_min[NUMBER_OF_ENTITIES];
+    float x_max[NUMBER_OF_ENTITIES];
+    float y_min[NUMBER_OF_ENTITIES];
+    float y_max[NUMBER_OF_ENTITIES];
 } HitBoxSystem;
 
 
@@ -50,7 +53,7 @@ typedef struct
 
 
 
-EntityComponentSystem ecs = {.size.x = {SPRITE_PLAYER_WIDTH}, {SPRITE_PLAYER_HEIGHT}};
+
 
 
 

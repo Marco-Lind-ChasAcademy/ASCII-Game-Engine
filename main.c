@@ -1,4 +1,4 @@
-#include <stdio.h>
+/* #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -263,4 +263,4 @@ void drawEntity(PositionSystem *pos_sys, SizeSystem *size_sys, int entity)
         memcpy(&screen_buffer[screen_buffer_index], &sprite_player_buffer[sprite_player_buffer_index], *size_sys->width);
         sprite_player_buffer_index += *size_sys->width + 1;
     }
-}
+} */

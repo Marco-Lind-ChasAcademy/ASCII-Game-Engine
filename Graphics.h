@@ -1,24 +1,20 @@
 #ifndef GRAPHICS
 #define GRAPHICS
 
-#include "ECS.h"
-#include "string.h"
-
-#define MAP_SIZE
-#define SCREEN_WIDTH 98
-#define SCREEN_HEIGHT 22
-#define FRAME_SIZE ((SCREEN_WIDTH + 1) * SCREEN_HEIGHT + 1)
+#include "GameLogic.h"
+//#include "Engine.h"
+#include <stdio.h>
 
 typedef union
 {
-    char frame[FRAME_SIZE];
+    char frame[SIZE_FRAME];
     struct
     {
         char newline;
         union
         {
-            char flat[(SCREEN_WIDTH + 1) * SCREEN_HEIGHT];
-            char grid[SCREEN_HEIGHT][SCREEN_WIDTH + 1];
+            char flat[(WIDTH_SCREEN + 1) * HEIGHT_SCREEN];
+            char grid[HEIGHT_SCREEN][WIDTH_SCREEN + 1];
         };
     };
     
@@ -26,17 +22,51 @@ typedef union
 
 typedef union
 {
-    int flat[(SCREEN_WIDTH + 1) * SCREEN_HEIGHT];
-    int grid[SCREEN_HEIGHT][SCREEN_WIDTH + 1];
+    char flat[(WIDTH_SCREEN + 1) * HEIGHT_SCREEN];
+    char grid[HEIGHT_SCREEN][WIDTH_SCREEN + 1];
 } MapBuffer;
 
-
-FrameBuffer frame = {'\n'};
-MapBuffer map;
-
-inline void copyMapToFrameBuffer()
+typedef union
 {
-    memcpy(&frame.flat, &map.flat, sizeof(frame.flat));
+    char flat[SIZE_SPRITE];
+    char grid[HEIGHT_SPRITE][WIDTH_SPRITE];
+} Sprite;
+
+typedef struct
+{
+    MapBuffer map;
+    FrameBuffer frame;
+    Sprite sprite[NUMBER_OF_ENTITIES];
+
+} BufferSystem;
+
+
+
+
+
+
+static inline void mapToFrameBufferCopy(BufferSystem *buffer)
+{
+    memcpy(&buffer->frame.flat, &buffer->map.flat, sizeof(buffer->frame.flat));
+}
+
+static inline void entityDraw(EntityComponentSystem *ecs, BufferSystem *buffer, TimeSystem *time, int entity)
+{
+    movePos(ecs, time, entity);
+    // Top left corner
+    int x_index = ecs->position.x[entity] - ecs->size.x[entity] / 2;
+    int y_index = ecs->position.y[entity] - ecs->size.y[entity] / 2;
+
+    for (int i = 0; i < ecs->size.y[entity]; i++)
+    {
+        memcpy(&buffer->frame.grid[y_index][x_index], buffer->sprite[PLAYER].grid[i], ecs->size.x[entity]);
+        y_index += 1;
+    }
+}
+
+static inline void frameDraw(BufferSystem *buffer)
+{
+    fwrite(buffer->frame.frame, 1, SIZE_FRAME, stdout);
 }
 
 #endif

@@ -1,101 +1,130 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
-#include "Graphics.h"
-#include <winuser.h>
+#include "Timers.h"
+//#include "Engine.h"
+//#include <windows.h>
 
-inline void mapPos(EntityComponentSystem *ecs, int entity, int x, int y)
+static inline void posSet(EntityComponentSystem *ecs, int entity, int x, int y)
 {
     ecs->position.x[entity] = x;
     ecs->position.y[entity] = y;
 }
 
-inline int keyIsPressed(char key_uppercase)
+static inline int keyIsPressed(char key_uppercase)
 {
     return GetAsyncKeyState(key_uppercase) & 0x8000;
 }
 
-inline int keyWasPressed(char key_uppercase)
+static inline int keyWasPressed(char key_uppercase)
 {
     return GetAsyncKeyState(key_uppercase) & 0x0001;
 }
 
-inline int topIsReached(EntityComponentSystem *ecs, int entity)
+static inline int topIsReached(EntityComponentSystem *ecs, int entity)
 {
     return ecs->position.y[entity] <= 0 + ecs->size.y[entity] / 2;
 }
 
-inline int bottomIsReached(EntityComponentSystem *ecs, int entity)
+static inline int bottomIsReached(EntityComponentSystem *ecs, int entity)
 {
-    return ecs->position.y[entity] >= SCREEN_HEIGHT - ecs->size.y[entity] / 2 - 1;
+    return ecs->position.y[entity] >= HEIGHT_SCREEN - ecs->size.y[entity] / 2 - 1;
 }
 
-inline int leftSideIsReached(EntityComponentSystem *ecs, int entity)
+static inline int leftSideIsReached(EntityComponentSystem *ecs, int entity)
 {
     return ecs->position.x[entity] <= 0 + ecs->size.x[entity] / 2 + 1;
 }
 
-inline int rightSideIsReached(EntityComponentSystem *ecs, int entity)
+static inline int rightSideIsReached(EntityComponentSystem *ecs, int entity)
 {
-    return ecs->position.x[entity] >= SCREEN_WIDTH - ecs->size.x[entity] / 2 + 1;
+    return ecs->position.x[entity] >= WIDTH_SCREEN - ecs->size.x[entity] / 2 + 1;
 }
 
-inline void moveUp(EntityComponentSystem *ecs, int entity)
+static inline void moveUp(EntityComponentSystem *ecs, TimeSystem *time, int entity)
 {
-    ecs->position.y[entity] += 1;
+    ecs->position.y_next[entity] = ecs->position.y[entity] - time->delta * ecs->velocity.y[entity];
+
+    if (ecs->position.y_next[entity] < ecs->size.y[entity] / 2)
+    {
+        ecs->position.y[entity] = ecs->size.y[entity] / 2;
+        return;
+    }
+
+    ecs->position.y[entity] = ecs->position.y_next[entity];
 }
 
-inline void moveDown(EntityComponentSystem *ecs, int entity)
+static inline void moveDown(EntityComponentSystem *ecs, TimeSystem *time, int entity)
 {
-    ecs->position.y[entity] -= 1;
+    ecs->position.y_next[entity] = ecs->position.y[entity] + time->delta * ecs->velocity.y[entity];
+
+    if (ecs->position.y_next[entity] > HEIGHT_SCREEN - ecs->size.y[entity] / 2)
+    {
+        ecs->position.y[entity] = HEIGHT_SCREEN - ecs->size.y[entity] / 2 - 1;
+        return;
+    }
+
+    ecs->position.y[entity] = ecs->position.y_next[entity];
 }
 
-inline void moveLeft(EntityComponentSystem *ecs, int entity)
+static inline void moveLeft(EntityComponentSystem *ecs, TimeSystem *time, int entity)
 {
-    ecs->position.x[entity] -= 1;
+    ecs->position.x_next[entity] = ecs->position.x[entity] - time->delta * ecs->velocity.x[entity];
+
+    if (ecs->position.x_next[entity] < ecs->size.x[entity] / 2)
+    {
+        ecs->position.x[entity] = ecs->size.x[entity] / 2;
+        return;
+    }
+
+    ecs->position.x[entity] = ecs->position.x_next[entity];
 }
 
-inline void moveRight(EntityComponentSystem *ecs, int entity)
+static inline void moveRight(EntityComponentSystem *ecs, TimeSystem *time, int entity)
 {
-    ecs->position.x[entity] += 1;
+    ecs->position.x_next[entity] = ecs->position.x[entity] + time->delta * ecs->velocity.x[entity];
+
+    if (ecs->position.x_next[entity] > WIDTH_SCREEN - ecs->size.x[entity] / 2)
+    {
+        ecs->position.x[entity] = WIDTH_SCREEN - ecs->size.x[entity] / 2;
+        return;
+    }
+
+    ecs->position.x[entity] = ecs->position.x_next[entity];
 }
 
-inline void movePos(EntityComponentSystem *ecs, int entity)
+static inline void movePos(EntityComponentSystem *ecs, TimeSystem *time, int entity)
 {
     if
     (
-        keyIsPressed('W') &&
-        !topIsReached(ecs, entity)
+        keyIsPressed('W')
     )
     {
-        moveUp(ecs, entity);
+        moveUp(ecs, time, entity);
     }
 
     if
     (
-        keyIsPressed('S') &&
-        !bottomIsReached(ecs, entity)        
+        keyIsPressed('S')
     )
     {
-        moveDown(ecs, entity);
+        moveDown(ecs, time, entity);
     }
 
     if
     (
-        keyIsPressed('A') &&
-        !leftSideIsReached(ecs, entity)
+        keyIsPressed('A')
     )
     {
-        moveLeft(ecs, entity);
+        moveLeft(ecs, time, entity);
     }
 
     if
     (
-        keyIsPressed('D') &&
-        !rightSideIsReached(ecs, entity)
+        keyIsPressed('D')
     )
     {
-        moveRight(ecs, entity);
+        moveRight(ecs, time, entity);
     }
 
 }
