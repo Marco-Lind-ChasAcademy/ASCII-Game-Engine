@@ -2,48 +2,6 @@
 #define GRAPHICS
 
 #include "GameLogic.h"
-//#include "Engine.h"
-#include <stdio.h>
-
-typedef union
-{
-    char frame[SIZE_FRAME];
-    struct
-    {
-        char newline;
-        union
-        {
-            char flat[(WIDTH_SCREEN + 1) * HEIGHT_SCREEN];
-            char grid[HEIGHT_SCREEN][WIDTH_SCREEN + 1];
-        };
-    };
-    
-} FrameBuffer;
-
-typedef union
-{
-    char flat[(WIDTH_SCREEN + 1) * HEIGHT_SCREEN];
-    char grid[HEIGHT_SCREEN][WIDTH_SCREEN + 1];
-} MapBuffer;
-
-typedef union
-{
-    char flat[SIZE_SPRITE];
-    char grid[HEIGHT_SPRITE][WIDTH_SPRITE];
-} Sprite;
-
-typedef struct
-{
-    MapBuffer map;
-    FrameBuffer frame;
-    Sprite sprite[NUMBER_OF_ENTITIES];
-
-} BufferSystem;
-
-
-
-
-
 
 static inline void mapToFrameBufferCopy(BufferSystem *buffer)
 {

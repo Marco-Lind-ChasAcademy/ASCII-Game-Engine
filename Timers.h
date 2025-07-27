@@ -2,13 +2,6 @@
 #define TIMERS_H
 
 #include "ECS.h"
-#include <windows.h>
-
-typedef struct
-{
-    LARGE_INTEGER current, last, frequency;
-    double delta, frame;
-} TimeSystem;
 
 static inline void timeSystemInit(TimeSystem *time)
 {

@@ -2,8 +2,6 @@
 #define GAMELOGIC_H
 
 #include "Timers.h"
-//#include "Engine.h"
-//#include <windows.h>
 
 static inline void posSet(EntityComponentSystem *ecs, int entity, int x, int y)
 {

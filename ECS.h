@@ -2,7 +2,6 @@
 #define ECS
 
 #include "Config.h"
-#include "Engine.h"
 
 typedef enum
 {
@@ -53,7 +52,53 @@ typedef struct
 
 
 
+typedef struct
+{
+    LARGE_INTEGER current, last, frequency;
+    double delta, frame;
+} TimeSystem;
 
+typedef union
+{
+    char frame[SIZE_FRAME];
+    struct
+    {
+        char newline;
+        union
+        {
+            char flat[(WIDTH_SCREEN + 1) * HEIGHT_SCREEN];
+            char grid[HEIGHT_SCREEN][WIDTH_SCREEN + 1];
+        };
+    };
+    
+} FrameBuffer;
+
+typedef union
+{
+    char flat[(WIDTH_SCREEN + 1) * HEIGHT_SCREEN];
+    char grid[HEIGHT_SCREEN][WIDTH_SCREEN + 1];
+} MapBuffer;
+
+typedef union
+{
+    char flat[SIZE_SPRITE];
+    char grid[HEIGHT_SPRITE][WIDTH_SPRITE];
+} Sprite;
+
+typedef struct
+{
+    MapBuffer map;
+    FrameBuffer frame;
+    Sprite sprite[NUMBER_OF_ENTITIES];
+
+} BufferSystem;
+
+typedef struct
+{
+    TimeSystem time;
+    EntityComponentSystem ecs;
+    BufferSystem buffer;
+} Engine;
 
 
 

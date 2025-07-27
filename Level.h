@@ -3,10 +3,6 @@
 
 #include "Graphics.h"
 
-// Future feature
-
-
-
 static inline int fileOpen(FILE **file_pointer, char *file_name, char *mode)
 {
     if ((*file_pointer = fopen(file_name, mode)) == NULL)

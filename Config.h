@@ -1,6 +1,11 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define WIN32_LEAN_AND_MEAN
+
+#include <stdio.h>
+#include <windows.h>
+
 #define NUMBER_OF_ENTITIES 2
 #define WIDTH_PLAYER 6
 #define HEIGHT_PLAYER 3
