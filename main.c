@@ -6,6 +6,7 @@ int main()
 {
     FILE *map_file = NULL;
     FILE *sprite_player_file = NULL;
+    FILE *sprite_enemy_file = NULL;
 
     if (!fileOpen(&map_file, "map.bin", "r"))
     {
@@ -17,28 +18,38 @@ int main()
         fclose(map_file);
         return 1;
     }
-
-    if
-    (
-        !fileRead(engine.buffer.map.flat, SIZE_FRAME - 1, map_file) ||
-        !fileReadSprite(engine.buffer.sprite[PLAYER].grid, WIDTH_PLAYER + 1, HEIGHT_PLAYER, sprite_player_file)
-    )
+    
+    if (!fileOpen(&sprite_enemy_file, "sprite_enemy.bin", "r"))
     {
         fclose(map_file);
         fclose(sprite_player_file);
         return 1;
     }
+
+    if
+    (
+        !fileRead(engine.buffer.map.flat, SIZE_FRAME - 1, map_file) ||
+        !fileReadSprite(&engine, PLAYER, sprite_player_file) ||
+        !fileReadSprite(&engine, ENEMY, sprite_enemy_file)
+    )
+    {
+        fclose(map_file);
+        fclose(sprite_player_file);
+        fclose(sprite_enemy_file);
+        return 1;
+    }
     
     fclose(map_file);
     fclose(sprite_player_file);
+    fclose(sprite_enemy_file);
 
-    timeSystemInit(&engine.time);
+    timeSystemInit(&engine);
 
 
     // Game loop
     while (!keyWasPressed(VK_ESCAPE))
     {
-        timeDeltaCalculate(&engine.time);
+        timeDeltaCalculate(&engine);
 
         if (engine.time.delta < engine.time.frame)
         {
@@ -47,16 +58,13 @@ int main()
 
         engine.time.last = engine.time.current;
         
-        mapToFrameBufferCopy(&engine.buffer);
+        mapToFrameBufferCopy(&engine);
 
-        // Move above the timer later. Also add velocity
-        entityDraw(&engine.ecs, &engine.buffer, &engine.time, PLAYER);
+        entityDraw(&engine, ENEMY);
+        playerDraw(&engine, PLAYER);
         
-        frameDraw(&engine.buffer);
+        frameDraw(&engine);
     }
-
-    fclose(map_file);
-    fclose(sprite_player_file);
     
 
     return 0;

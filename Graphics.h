@@ -3,28 +3,33 @@
 
 #include "GameLogic.h"
 
-static inline void mapToFrameBufferCopy(BufferSystem *buffer)
+static inline void mapToFrameBufferCopy(Engine *engine)
 {
-    memcpy(&buffer->frame.flat, &buffer->map.flat, sizeof(buffer->frame.flat));
+    memcpy(&engine->buffer.frame.flat, &engine->buffer.map.flat, sizeof(engine->buffer.frame.flat));
 }
 
-static inline void entityDraw(EntityComponentSystem *ecs, BufferSystem *buffer, TimeSystem *time, int entity)
+static inline void entityDraw(Engine *engine, int entity)
 {
-    movePos(ecs, time, entity);
     // Top left corner
-    int x_index = ecs->position.x[entity] - ecs->size.x[entity] / 2;
-    int y_index = ecs->position.y[entity] - ecs->size.y[entity] / 2;
+    int x_index = engine->ecs.position.x[entity] - engine->ecs.size.x[entity] / 2;
+    int y_index = engine->ecs.position.y[entity] - engine->ecs.size.y[entity] / 2;
 
-    for (int i = 0; i < ecs->size.y[entity]; i++)
+    for (int i = 0; i < engine->ecs.size.y[entity]; i++)
     {
-        memcpy(&buffer->frame.grid[y_index][x_index], buffer->sprite[PLAYER].grid[i], ecs->size.x[entity]);
+        memcpy(&engine->buffer.frame.grid[y_index][x_index], engine->buffer.sprite[entity].grid[i], engine->ecs.size.x[entity]);
         y_index += 1;
     }
 }
 
-static inline void frameDraw(BufferSystem *buffer)
+static inline void playerDraw(Engine *engine, int entity)
 {
-    fwrite(buffer->frame.frame, 1, SIZE_FRAME, stdout);
+    movePos(engine, entity);
+    entityDraw(engine, entity);
+}
+
+static inline void frameDraw(Engine *engine)
+{
+    fwrite(engine->buffer.frame.frame, 1, SIZE_FRAME, stdout);
 }
 
 #endif

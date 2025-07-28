@@ -1,12 +1,23 @@
 #ifndef GAMELOGIC_H
 #define GAMELOGIC_H
 
+
+
 #include "Timers.h"
 
-static inline void posSet(EntityComponentSystem *ecs, int entity, int x, int y)
+
+
+int collidingToTheRight(Engine *engine, int entity);
+int collidingToTheLeft(Engine *engine, int entity);
+int collidingFromtheTop(Engine *engine, int entity);
+int collidingToTheBottom(Engine *engine, int entity);
+
+
+
+static inline void posSet(Engine *engine, int entity, int x, int y)
 {
-    ecs->position.x[entity] = x;
-    ecs->position.y[entity] = y;
+    engine->ecs.position.x[entity] = x;
+    engine->ecs.position.y[entity] = y;
 }
 
 static inline int keyIsPressed(char key_uppercase)
@@ -19,86 +30,114 @@ static inline int keyWasPressed(char key_uppercase)
     return GetAsyncKeyState(key_uppercase) & 0x0001;
 }
 
-static inline int topIsReached(EntityComponentSystem *ecs, int entity)
+static inline int topIsReached(Engine *engine, int entity)
 {
-    return ecs->position.y[entity] <= 0 + ecs->size.y[entity] / 2;
+    return engine->ecs.position.y[entity] <= 0 + engine->ecs.size.y[entity] / 2;
 }
 
-static inline int bottomIsReached(EntityComponentSystem *ecs, int entity)
+static inline int bottomIsReached(Engine *engine, int entity)
 {
-    return ecs->position.y[entity] >= HEIGHT_SCREEN - ecs->size.y[entity] / 2 - 1;
+    return engine->ecs.position.y[entity] >= HEIGHT_SCREEN - engine->ecs.size.y[entity] / 2 - 1;
 }
 
-static inline int leftSideIsReached(EntityComponentSystem *ecs, int entity)
+static inline int leftSideIsReached(Engine *engine, int entity)
 {
-    return ecs->position.x[entity] <= 0 + ecs->size.x[entity] / 2 + 1;
+    return engine->ecs.position.x[entity] <= 0 + engine->ecs.size.x[entity] / 2 + 1;
 }
 
-static inline int rightSideIsReached(EntityComponentSystem *ecs, int entity)
+static inline int rightSideIsReached(Engine *engine, int entity)
 {
-    return ecs->position.x[entity] >= WIDTH_SCREEN - ecs->size.x[entity] / 2 + 1;
+    return engine->ecs.position.x[entity] >= WIDTH_SCREEN - engine->ecs.size.x[entity] / 2 + 1;
 }
 
-static inline void moveUp(EntityComponentSystem *ecs, TimeSystem *time, int entity)
+static int isEven(int number)
 {
-    ecs->position.y_next[entity] = ecs->position.y[entity] - time->delta * ecs->velocity.y[entity];
+    return !(number % 2);
+}
 
-    if (ecs->position.y_next[entity] < ecs->size.y[entity] / 2)
+static inline void moveUp(Engine *engine, int entity)
+{
+    engine->ecs.position.y_next[entity] = engine->ecs.position.y[entity] - engine->time.delta * engine->ecs.velocity.y[entity];
+
+    if (engine->ecs.position.y_next[entity] < engine->ecs.size.y[entity] / 2)
     {
-        ecs->position.y[entity] = ecs->size.y[entity] / 2;
+        engine->ecs.position.y[entity] = engine->ecs.size.y[entity] / 2;
         return;
     }
 
-    ecs->position.y[entity] = ecs->position.y_next[entity];
+    if (collidingFromtheTop(engine, entity))
+    {
+        return;
+    }
+    
+
+    engine->ecs.position.y[entity] = engine->ecs.position.y_next[entity];
 }
 
-static inline void moveDown(EntityComponentSystem *ecs, TimeSystem *time, int entity)
+static inline void moveDown(Engine *engine, int entity)
 {
-    ecs->position.y_next[entity] = ecs->position.y[entity] + time->delta * ecs->velocity.y[entity];
+    engine->ecs.position.y_next[entity] = engine->ecs.position.y[entity] + engine->time.delta * engine->ecs.velocity.y[entity];
 
-    if (ecs->position.y_next[entity] > HEIGHT_SCREEN - ecs->size.y[entity] / 2)
+    if (engine->ecs.position.y_next[entity] > HEIGHT_SCREEN - engine->ecs.size.y[entity] / 2)
     {
-        ecs->position.y[entity] = HEIGHT_SCREEN - ecs->size.y[entity] / 2 - 1;
+        engine->ecs.position.y[entity] = HEIGHT_SCREEN - engine->ecs.size.y[entity] / 2 - 1;
         return;
     }
 
-    ecs->position.y[entity] = ecs->position.y_next[entity];
-}
-
-static inline void moveLeft(EntityComponentSystem *ecs, TimeSystem *time, int entity)
-{
-    ecs->position.x_next[entity] = ecs->position.x[entity] - time->delta * ecs->velocity.x[entity];
-
-    if (ecs->position.x_next[entity] < ecs->size.x[entity] / 2)
+    if (collidingToTheBottom(engine, entity))
     {
-        ecs->position.x[entity] = ecs->size.x[entity] / 2;
         return;
     }
 
-    ecs->position.x[entity] = ecs->position.x_next[entity];
+    engine->ecs.position.y[entity] = engine->ecs.position.y_next[entity];
 }
 
-static inline void moveRight(EntityComponentSystem *ecs, TimeSystem *time, int entity)
+static inline void moveLeft(Engine *engine, int entity)
 {
-    ecs->position.x_next[entity] = ecs->position.x[entity] + time->delta * ecs->velocity.x[entity];
+    engine->ecs.position.x_next[entity] = engine->ecs.position.x[entity] - engine->time.delta * engine->ecs.velocity.x[entity];
 
-    if (ecs->position.x_next[entity] > WIDTH_SCREEN - ecs->size.x[entity] / 2)
+    if (engine->ecs.position.x_next[entity] < engine->ecs.size.x[entity] / 2)
     {
-        ecs->position.x[entity] = WIDTH_SCREEN - ecs->size.x[entity] / 2;
+        engine->ecs.position.x[entity] = engine->ecs.size.x[entity] / 2;
         return;
     }
 
-    ecs->position.x[entity] = ecs->position.x_next[entity];
+    if (collidingToTheLeft(engine, entity))
+    {
+        return;
+    }
+    
+
+    engine->ecs.position.x[entity] = engine->ecs.position.x_next[entity];
 }
 
-static inline void movePos(EntityComponentSystem *ecs, TimeSystem *time, int entity)
+static inline void moveRight(Engine *engine, int entity)
+{
+    engine->ecs.position.x_next[entity] = engine->ecs.position.x[entity] + engine->time.delta * engine->ecs.velocity.x[entity];
+
+    if (engine->ecs.position.x_next[entity] > WIDTH_SCREEN - engine->ecs.size.x[entity] / 2)
+    {
+        engine->ecs.position.x[entity] = WIDTH_SCREEN - engine->ecs.size.x[entity] / 2;
+        return;
+    }
+
+    if (collidingToTheRight(engine, entity))
+    {
+        return;
+    }
+    
+    
+    engine->ecs.position.x[entity] = engine->ecs.position.x_next[entity];
+}
+
+static inline void movePos(Engine *engine, int entity)
 {
     if
     (
         keyIsPressed('W')
     )
     {
-        moveUp(ecs, time, entity);
+        moveUp(engine, entity);
     }
 
     if
@@ -106,7 +145,7 @@ static inline void movePos(EntityComponentSystem *ecs, TimeSystem *time, int ent
         keyIsPressed('S')
     )
     {
-        moveDown(ecs, time, entity);
+        moveDown(engine, entity);
     }
 
     if
@@ -114,7 +153,7 @@ static inline void movePos(EntityComponentSystem *ecs, TimeSystem *time, int ent
         keyIsPressed('A')
     )
     {
-        moveLeft(ecs, time, entity);
+        moveLeft(engine, entity);
     }
 
     if
@@ -122,7 +161,7 @@ static inline void movePos(EntityComponentSystem *ecs, TimeSystem *time, int ent
         keyIsPressed('D')
     )
     {
-        moveRight(ecs, time, entity);
+        moveRight(engine, entity);
     }
 
 }

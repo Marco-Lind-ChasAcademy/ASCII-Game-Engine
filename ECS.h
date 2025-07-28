@@ -25,10 +25,8 @@ typedef struct
 
 typedef struct
 {
-    float x_min[NUMBER_OF_ENTITIES];
-    float x_max[NUMBER_OF_ENTITIES];
-    float y_min[NUMBER_OF_ENTITIES];
-    float y_max[NUMBER_OF_ENTITIES];
+    float width[NUMBER_OF_ENTITIES];
+    float height[NUMBER_OF_ENTITIES];
 } HitBoxSystem;
 
 

@@ -3,16 +3,16 @@
 
 #include "ECS.h"
 
-static inline void timeSystemInit(TimeSystem *time)
+static inline void timeSystemInit(Engine *engine)
 {
-    QueryPerformanceFrequency(&time->frequency);
-    QueryPerformanceCounter(&time->last);
+    QueryPerformanceFrequency(&engine->time.frequency);
+    QueryPerformanceCounter(&engine->time.last);
 }
 
-static inline void timeDeltaCalculate(TimeSystem *time)
+static inline void timeDeltaCalculate(Engine *engine)
 {
-    QueryPerformanceCounter(&time->current);
-    time->delta = (double)(time->current.QuadPart - time->last.QuadPart) / time->frequency.QuadPart;
+    QueryPerformanceCounter(&engine->time.current);
+    engine->time.delta = (double)(engine->time.current.QuadPart - engine->time.last.QuadPart) / engine->time.frequency.QuadPart;
 }
 
 #endif

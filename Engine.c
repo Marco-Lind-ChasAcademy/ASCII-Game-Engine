@@ -10,18 +10,23 @@ Engine engine =
     {
         .position =
         {
-            .x = {WIDTH_SCREEN / 4},
-            .y = {HEIGHT_SCREEN / 2}
+            .x = {WIDTH_SCREEN / 4, POSITION_X_ENEMY},
+            .y = {HEIGHT_SCREEN / 2, POSITION_Y_ENEMY}
         },
         .velocity =
         {
             .x = {VELOCITY_PLAYER_X},
             .y = {VELOCITY_PLAYER_Y}
         },
+        .hitbox =
+        {
+            .height = {HEIGHT_PLAYER, HEIGHT_ENEMY},
+            .width = {WIDTH_PLAYER, WIDTH_ENEMY}
+        },
         .size =
         {
-            .x = {WIDTH_PLAYER},
-            .y = {HEIGHT_PLAYER}
+            .x = {WIDTH_PLAYER, WIDTH_ENEMY},
+            .y = {HEIGHT_PLAYER, HEIGHT_ENEMY}
         }
     },
     .buffer =
