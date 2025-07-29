@@ -2,14 +2,32 @@
 
 
 
-int fileReadSprite(Engine *engine, int entity, FILE *file_pointer)
+int fileReadSpritePlayer(Engine *engine, FILE *file_pointer)
 {
-    for (size_t i = 0; i < engine->ecs.size.y[entity]; i++)
+    for (size_t i = 0; i < engine->ecs.size.y_sprite_sheet[PLAYER]; i++)
     {
-        if (!fileRead(engine->buffer.sprite[entity].grid[i], engine->ecs.size.x[entity] + 1, file_pointer))
+        if (!fileRead(engine->buffer.sprite.player.grid[i], engine->ecs.size.x[PLAYER], file_pointer))
         {
             return 0;
         }
+        
+        getc(file_pointer);
+
+    }
+
+    return 1;
+}
+
+int fileReadSpriteEnemy(Engine *engine, FILE *file_pointer)
+{
+    for (size_t i = 0; i < engine->ecs.size.y_sprite_sheet[ENEMY]; i++)
+    {
+        if (!fileRead(engine->buffer.sprite.enemy.grid[i], engine->ecs.size.x[ENEMY], file_pointer))
+        {
+            return 0;
+        }
+        
+        getc(file_pointer);
 
     }
 

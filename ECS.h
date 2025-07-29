@@ -34,6 +34,7 @@ typedef struct
 {
     int x[NUMBER_OF_ENTITIES];
     int y[NUMBER_OF_ENTITIES];
+    int y_sprite_sheet[NUMBER_OF_ENTITIES];
 } SizeSystem;
 
 
@@ -79,15 +80,28 @@ typedef union
 
 typedef union
 {
-    char flat[SIZE_SPRITE];
-    char grid[HEIGHT_SPRITE][WIDTH_SPRITE];
-} Sprite;
+    char flat[SIZE_PLAYER_SPRITE_SHEET];
+    char grid[HEGIHT_PLAYER_SPRITE_SHEET][WIDTH_PLAYER];
+} SpritePlayer;
+
+typedef union
+{
+    char flat[SIZE_ENEMY];
+    char grid[HEIGHT_ENEMY][WIDTH_ENEMY];
+} SpriteEnemy;
+
+typedef struct
+{
+    SpritePlayer player;
+    SpriteEnemy enemy;
+} SpriteSystem;
+
 
 typedef struct
 {
     MapBuffer map;
     FrameBuffer frame;
-    Sprite sprite[NUMBER_OF_ENTITIES];
+    SpriteSystem sprite;
 
 } BufferSystem;
 

@@ -5,7 +5,8 @@
 
 
 
-int fileReadSprite(Engine *engine, int entity, FILE *file_pointer);
+int fileReadSpritePlayer(Engine *engine, FILE *file_pointer);
+int fileReadSpriteEnemy(Engine *engine, FILE *file_pointer);
 
 
 

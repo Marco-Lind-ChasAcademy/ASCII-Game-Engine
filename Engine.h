@@ -3,7 +3,8 @@
 
 #include "Level.h"
 
-extern Engine engine;
+Engine *engineInit(size_t engine_size);
+//extern Engine engine;
 
 
 #endif
