@@ -8,6 +8,11 @@ typedef enum
     PLAYER,
     ENEMY
 } EntityID;
+typedef enum
+{
+    NOTHING,
+    CIRCLING
+} ActionID;
 
 typedef struct
 {
@@ -37,6 +42,13 @@ typedef struct
     int y_sprite_sheet[NUMBER_OF_ENTITIES];
 } SizeSystem;
 
+typedef struct
+{
+    int action[NUMBER_OF_ENTITIES];
+    int animation[NUMBER_OF_ENTITIES];
+} StateSystem;
+
+
 
 
 
@@ -46,6 +58,7 @@ typedef struct
     VelocitySystem velocity;
     HitBoxSystem hitbox;
     SizeSystem size;
+    StateSystem state;
 } EntityComponentSystem;
 
 
@@ -54,7 +67,7 @@ typedef struct
 typedef struct
 {
     LARGE_INTEGER current, last, frequency;
-    double delta, frame;
+    double delta, frame, since_animation_start;
 } TimeSystem;
 
 typedef union
