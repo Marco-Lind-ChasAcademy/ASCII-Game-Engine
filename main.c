@@ -67,11 +67,8 @@ int main()
         mapToFrameBufferCopy(engine);
 
         enemyDraw(engine);
-        
-        //movePos(engine, PLAYER);
+
         animationDrawPlayerCircling(engine, 1);
-        
-        //playerDraw(engine);
         
         frameDraw(engine);
     }

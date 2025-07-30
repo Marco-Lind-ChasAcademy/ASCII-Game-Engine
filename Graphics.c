@@ -1,6 +1,6 @@
 #include "Graphics.h"
 
-// Returns 1 when done
+// Returns 0 when done
 int animationDrawPlayerCircling(Engine *engine, double animation_duration_in_seconds)
 {
     if (animation_duration_in_seconds <= 0)
@@ -12,12 +12,12 @@ int animationDrawPlayerCircling(Engine *engine, double animation_duration_in_sec
 
     double time_between_animation_frames = animation_duration_in_seconds / (NUMBER_OF_PLAYER_CIRCLING_SPRITES);
 
-    int case_num = engine->time.since_animation_start / time_between_animation_frames;
-
-    if (case_num < 0)
+    if (engine->time.since_animation_start < 0)
     {
-        case_num = 0;
+        engine->time.since_animation_start = 0;
     }
+
+    int case_num = engine->time.since_animation_start / time_between_animation_frames;
     
     if (case_num >= (NUMBER_OF_PLAYER_CIRCLING_SPRITES))
     {
