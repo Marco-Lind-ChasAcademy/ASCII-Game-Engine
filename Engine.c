@@ -39,6 +39,13 @@
 Engine *engineInit(size_t engine_size)
 {
     Engine* engine = malloc(engine_size);
+    char *engine_raw = (char *)engine;
+
+    for (size_t i = 0; i < engine_size; i += 4096)
+    {
+        engine_raw[i] = '\0';
+    }
+    
     
     engine->time.frame = TIME_FRAME;
 
