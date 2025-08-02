@@ -2,7 +2,7 @@
 
 
 
-int collidingToTheRight(Engine *engine, int entity)
+int entityCollidingToTheRight(Engine *engine, int entity)
 {
     for (int i = 0; i < NUMBER_OF_ENTITIES; i++)
     {
@@ -29,7 +29,7 @@ int collidingToTheRight(Engine *engine, int entity)
     return 0;
 }
 
-int collidingToTheLeft(Engine *engine, int entity)
+int entityCollidingToTheLeft(Engine *engine, int entity)
 {
     for (int i = 0; i < NUMBER_OF_ENTITIES; i++)
     {
@@ -56,7 +56,7 @@ int collidingToTheLeft(Engine *engine, int entity)
     return 0;
 }
 
-int collidingFromtheTop(Engine *engine, int entity)
+int entityCollidingFromtheTop(Engine *engine, int entity)
 {
     for (int i = 0; i < NUMBER_OF_ENTITIES; i++)
     {
@@ -83,7 +83,7 @@ int collidingFromtheTop(Engine *engine, int entity)
     return 0;
 }
 
-int collidingToTheBottom(Engine *engine, int entity)
+int entityCollidingToTheBottom(Engine *engine, int entity)
 {
     for (int i = 0; i < NUMBER_OF_ENTITIES; i++)
     {

@@ -64,11 +64,11 @@ int main()
 
         engine->time.last = engine->time.current;
         
-        mapToFrameBufferCopy(engine);
+        mapCopyToFrameBuffer(engine);
 
         enemyDraw(engine);
 
-        animationDrawPlayerCircling(engine, 1);
+        playerDrawAnimationCircling(engine, 0.5);
         
         frameDraw(engine);
     }

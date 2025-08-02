@@ -7,10 +7,10 @@
 
 
 
-int collidingToTheRight(Engine *engine, int entity);
-int collidingToTheLeft(Engine *engine, int entity);
-int collidingFromtheTop(Engine *engine, int entity);
-int collidingToTheBottom(Engine *engine, int entity);
+int entityCollidingToTheRight(Engine *engine, int entity);
+int entityCollidingToTheLeft(Engine *engine, int entity);
+int entityCollidingFromtheTop(Engine *engine, int entity);
+int entityCollidingToTheBottom(Engine *engine, int entity);
 
 
 
@@ -55,7 +55,7 @@ static int isEven(int number)
     return !(number % 2);
 }
 
-static inline void moveUp(Engine *engine, int entity)
+static inline void entityMoveUp(Engine *engine, int entity)
 {
     engine->ecs.position.y_next[entity] = engine->ecs.position.y[entity] - engine->time.delta * engine->ecs.velocity.y[entity];
 
@@ -65,7 +65,7 @@ static inline void moveUp(Engine *engine, int entity)
         return;
     }
 
-    if (collidingFromtheTop(engine, entity))
+    if (entityCollidingFromtheTop(engine, entity))
     {
         return;
     }
@@ -74,7 +74,7 @@ static inline void moveUp(Engine *engine, int entity)
     engine->ecs.position.y[entity] = engine->ecs.position.y_next[entity];
 }
 
-static inline void moveDown(Engine *engine, int entity)
+static inline void entityMoveDown(Engine *engine, int entity)
 {
     engine->ecs.position.y_next[entity] = engine->ecs.position.y[entity] + engine->time.delta * engine->ecs.velocity.y[entity];
 
@@ -84,7 +84,7 @@ static inline void moveDown(Engine *engine, int entity)
         return;
     }
 
-    if (collidingToTheBottom(engine, entity))
+    if (entityCollidingToTheBottom(engine, entity))
     {
         return;
     }
@@ -92,7 +92,7 @@ static inline void moveDown(Engine *engine, int entity)
     engine->ecs.position.y[entity] = engine->ecs.position.y_next[entity];
 }
 
-static inline void moveLeft(Engine *engine, int entity)
+static inline void entityMoveLeft(Engine *engine, int entity)
 {
     engine->ecs.position.x_next[entity] = engine->ecs.position.x[entity] - engine->time.delta * engine->ecs.velocity.x[entity];
 
@@ -102,7 +102,7 @@ static inline void moveLeft(Engine *engine, int entity)
         return;
     }
 
-    if (collidingToTheLeft(engine, entity))
+    if (entityCollidingToTheLeft(engine, entity))
     {
         return;
     }
@@ -111,7 +111,7 @@ static inline void moveLeft(Engine *engine, int entity)
     engine->ecs.position.x[entity] = engine->ecs.position.x_next[entity];
 }
 
-static inline void moveRight(Engine *engine, int entity)
+static inline void entityMoveRight(Engine *engine, int entity)
 {
     engine->ecs.position.x_next[entity] = engine->ecs.position.x[entity] + engine->time.delta * engine->ecs.velocity.x[entity];
 
@@ -121,7 +121,7 @@ static inline void moveRight(Engine *engine, int entity)
         return;
     }
 
-    if (collidingToTheRight(engine, entity))
+    if (entityCollidingToTheRight(engine, entity))
     {
         return;
     }
@@ -130,14 +130,14 @@ static inline void moveRight(Engine *engine, int entity)
     engine->ecs.position.x[entity] = engine->ecs.position.x_next[entity];
 }
 
-static inline void movePos(Engine *engine, int entity)
+static inline void entityMovePos(Engine *engine, int entity)
 {
     if
     (
         keyIsPressed('W')
     )
     {
-        moveUp(engine, entity);
+        entityMoveUp(engine, entity);
     }
 
     if
@@ -145,7 +145,7 @@ static inline void movePos(Engine *engine, int entity)
         keyIsPressed('S')
     )
     {
-        moveDown(engine, entity);
+        entityMoveDown(engine, entity);
     }
 
     if
@@ -153,7 +153,7 @@ static inline void movePos(Engine *engine, int entity)
         keyIsPressed('A')
     )
     {
-        moveLeft(engine, entity);
+        entityMoveLeft(engine, entity);
     }
 
     if
@@ -161,7 +161,7 @@ static inline void movePos(Engine *engine, int entity)
         keyIsPressed('D')
     )
     {
-        moveRight(engine, entity);
+        entityMoveRight(engine, entity);
     }
 
 }
