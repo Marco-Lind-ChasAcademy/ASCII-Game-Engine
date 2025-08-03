@@ -100,7 +100,7 @@ typedef union
 typedef union
 {
     char flat[SIZE_ENEMY];
-    char grid[HEIGHT_ENEMY][WIDTH_ENEMY];
+    char grid[HEIGHT_ENEMY_SPRITE_SHEET][WIDTH_ENEMY];
 } SpriteEnemy;
 
 typedef struct

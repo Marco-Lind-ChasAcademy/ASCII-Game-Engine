@@ -66,9 +66,11 @@ int main()
         
         mapCopyToFrameBuffer(engine);
 
-        enemyDraw(engine);
+        entityDrawAnimation(engine, ENEMY, 8, NUMBER_OF_ENEMY_BLINKING_SPRITES, engine->buffer.sprite.enemy.flat);
 
-        playerDrawAnimationCircling(engine, 0.5);
+        //enemyDraw(engine);
+
+        playerDrawAnimationCircling(engine, 1);
         
         frameDraw(engine);
     }

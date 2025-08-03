@@ -69,7 +69,7 @@ Engine *engineInit(size_t engine_size)
     engine->ecs.size.y[PLAYER] = HEIGHT_PLAYER;
     engine->ecs.size.y[ENEMY] = HEIGHT_ENEMY;
     engine->ecs.size.y_sprite_sheet[PLAYER] = HEGIHT_PLAYER_SPRITE_SHEET;
-    engine->ecs.size.y_sprite_sheet[ENEMY] = HEIGHT_ENEMY;
+    engine->ecs.size.y_sprite_sheet[ENEMY] = HEIGHT_ENEMY_SPRITE_SHEET;
 
     engine->time.since_animation_start = 0;
 

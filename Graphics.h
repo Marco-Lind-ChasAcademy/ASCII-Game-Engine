@@ -83,6 +83,50 @@ static inline int entityDrawAnimation(Engine *engine, int entity, double animati
         case_num = case_num % (number_of_sprites_in_animation);
     }
     
+    entityDrawFromRow(engine, entity, (case_num + 1) * engine->ecs.size.y[entity], sprite_sheet);
+    
+    engine->time.since_animation_start += engine->time.delta;
+
+    if (case_num == number_of_sprites_in_animation - 1)
+    {
+        engine->ecs.state.animation[entity] = 0;
+    }
+    else
+    {
+        engine->ecs.state.animation[entity] = 1;
+    }
+    
+
+    return engine->ecs.state.animation[entity];
+}
+
+// Returns 0 when done
+static inline int entityDrawAndMoveAnimation(Engine *engine, int entity, double animation_duration_in_seconds, int number_of_sprites_in_animation, char *sprite_sheet)
+{
+    double time_between_animation_frames;
+    int case_num;
+
+    if (animation_duration_in_seconds <= 0)
+    {
+        puts("animationDrawPlayerCircling(): animation_duration_in_seconds can't be 0 or negative!");
+        system("pause");
+        return 0;
+    }
+
+    time_between_animation_frames = animation_duration_in_seconds / number_of_sprites_in_animation;
+
+    if (engine->time.since_animation_start < 0)
+    {
+        engine->time.since_animation_start = 0;
+    }
+
+    case_num = engine->time.since_animation_start / time_between_animation_frames;
+    
+    if (case_num >= (number_of_sprites_in_animation))
+    {
+        case_num = case_num % (number_of_sprites_in_animation);
+    }
+    
     entityDrawAndMove(engine, entity, (case_num + 1) * engine->ecs.size.y[entity], sprite_sheet);
     
     engine->time.since_animation_start += engine->time.delta;
