@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "../include/Engine.h"
 
 
 
@@ -10,20 +10,20 @@ int main()
     FILE *sprite_player_file = NULL;
     FILE *sprite_enemy_file = NULL;
 
-    if (!fileOpen(&map_file, "map.bin", "r"))
+    if (!fileOpen(&map_file, "assets/map.bin", "r"))
     {
         free(engine);
         return 1;
     }
     
-    if (!fileOpen(&sprite_player_file, "sprite_player.bin", "r"))
+    if (!fileOpen(&sprite_player_file, "assets/sprite_player.bin", "r"))
     {
         free(engine);
         fclose(map_file);
         return 1;
     }
     
-    if (!fileOpen(&sprite_enemy_file, "sprite_enemy.bin", "r"))
+    if (!fileOpen(&sprite_enemy_file, "assets/sprite_enemy.bin", "r"))
     {
         free(engine);
         fclose(map_file);

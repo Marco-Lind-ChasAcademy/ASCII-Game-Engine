@@ -1,4 +1,4 @@
-#include "Graphics.h"
+#include "../include/Graphics.h"
 
 // Returns 0 when done
 int playerDrawAnimationCircling(Engine *engine, double animation_duration_in_seconds)
