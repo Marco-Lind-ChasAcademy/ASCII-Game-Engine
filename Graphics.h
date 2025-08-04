@@ -5,10 +5,22 @@
 
 int playerDrawAnimationCircling(Engine *engine, double time_between_animation_frames);
 
-static inline void drawString(Engine *engine, int entity, char *string, int *map_y_index, int map_x_index)
+static inline void stringDraw(Engine *engine, int entity, char *string, int map_y_index, int map_x_index)
 {
-    memcpy(&engine->buffer.frame.grid[*map_y_index][map_x_index], string, engine->ecs.size.x[entity]);
-    *map_y_index += 1;
+    memcpy(&engine->buffer.frame.grid[map_y_index][map_x_index], string, engine->ecs.size.x[entity]);
+}
+
+static inline void stringDrawAlpha(Engine *engine, int entity, char *string, int map_y_index, int map_x_index)
+{
+    for (size_t i = 0; i < engine->ecs.size.x[entity]; i++)
+    {
+        if (string[i] == ' ')
+        {
+            continue;
+        }
+        
+        engine->buffer.frame.grid[map_y_index][map_x_index + i] = string[i];
+    }
 }
 
 static inline void entityDrawFromRow(Engine *engine, int entity, int row, char *sprite_sheet)
@@ -20,7 +32,23 @@ static inline void entityDrawFromRow(Engine *engine, int entity, int row, char *
 
     for (; row < index_last_row; row++)
     {
-        drawString(engine, entity, &sprite_sheet[engine->ecs.size.x[entity] * row], &map_y_index, map_x_index);
+        stringDraw(engine, entity, &sprite_sheet[engine->ecs.size.x[entity] * row], map_y_index, map_x_index);
+        map_y_index += 1;
+    }
+
+}
+
+static inline void entityDrawFromRowAlpha(Engine *engine, int entity, int row, char *sprite_sheet)
+{
+
+    int map_x_index = engine->ecs.position.x[entity] - engine->ecs.size.x[entity] / 2;
+    int map_y_index = engine->ecs.position.y[entity] - engine->ecs.size.y[entity] / 2;
+    int index_last_row = row + engine->ecs.size.y[entity];
+
+    for (; row < index_last_row; row++)
+    {
+        stringDrawAlpha(engine, entity, &sprite_sheet[engine->ecs.size.x[entity] * row], map_y_index, map_x_index);
+        map_y_index += 1;
     }
 
 }
@@ -142,6 +170,20 @@ static inline int entityDrawAndMoveAnimation(Engine *engine, int entity, double 
     
 
     return engine->ecs.state.animation[entity];
+}
+
+static inline void stringDrawCentered(Engine *engine, char *text, size_t text_length, int row_index)
+{
+    if (isEven(WIDTH_SCREEN) && !isEven(text_length))
+    {
+        memcpy(&engine->buffer.frame.grid[row_index][WIDTH_SCREEN / 2 - text_length / 2 - 2], text, text_length);
+    }
+    else
+    {
+        
+        memcpy(&engine->buffer.frame.grid[row_index][WIDTH_SCREEN / 2 - text_length / 2 - 1], text, text_length);
+    }
+    
 }
 
 #endif

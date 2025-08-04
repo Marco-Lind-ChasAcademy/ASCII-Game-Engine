@@ -71,6 +71,8 @@ int main()
         //enemyDraw(engine);
 
         playerDrawAnimationCircling(engine, 1);
+
+        stringDrawCentered(engine, "Marco's locker:", 16, 2);
         
         frameDraw(engine);
     }
