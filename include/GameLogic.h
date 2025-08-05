@@ -96,9 +96,9 @@ static inline void entityMoveLeft(Engine *engine, int entity)
 {
     engine->ecs.position.x_next[entity] = engine->ecs.position.x[entity] - engine->time.delta * engine->ecs.velocity.x[entity];
 
-    if (engine->ecs.position.x_next[entity] < engine->ecs.size.x[entity] / 2)
+    if (engine->ecs.position.x_next[entity] < engine->ecs.size.x[entity] / 2 + 3)
     {
-        engine->ecs.position.x[entity] = engine->ecs.size.x[entity] / 2;
+        engine->ecs.position.x[entity] = engine->ecs.size.x[entity] / 2 + 3;
         return;
     }
 

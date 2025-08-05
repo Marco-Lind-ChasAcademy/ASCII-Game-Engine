@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <windows.h>
 
-#define NUMBER_OF_ENTITIES 2
+#define NUMBER_OF_ENTITIES (2 + 1) // Zero is for NO_ENTITY, i.e. unused
 #define WIDTH_PLAYER 6
 #define HEIGHT_PLAYER 3
 #define HEGIHT_PLAYER_SPRITE_SHEET 27
@@ -15,7 +15,7 @@
 
 #define SIZE_MAP
 #define WIDTH_SCREEN 98
-#define HEIGHT_SCREEN 22
+#define HEIGHT_SCREEN 24
 #define SIZE_FRAME ((WIDTH_SCREEN + 1) * HEIGHT_SCREEN + 1)
 
 #define VELOCITY_PLAYER_X 20

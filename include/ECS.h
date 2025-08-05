@@ -5,12 +5,13 @@
 
 typedef enum
 {
+    NO_ENTITY,
     PLAYER,
     ENEMY
 } EntityID;
 typedef enum
 {
-    NOTHING,
+    NO_ACTION,
     CIRCLING
 } ActionID;
 

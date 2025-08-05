@@ -176,12 +176,12 @@ static inline void stringDrawCentered(Engine *engine, char *text, size_t text_le
 {
     if (isEven(WIDTH_SCREEN) && !isEven(text_length))
     {
-        memcpy(&engine->buffer.frame.grid[row_index][WIDTH_SCREEN / 2 - text_length / 2 - 2], text, text_length);
+        memcpy(&engine->buffer.frame.grid[row_index][WIDTH_SCREEN / 2 - text_length / 2 - 2 + 3], text, text_length);
     }
     else
     {
         
-        memcpy(&engine->buffer.frame.grid[row_index][WIDTH_SCREEN / 2 - text_length / 2 - 1], text, text_length);
+        memcpy(&engine->buffer.frame.grid[row_index][WIDTH_SCREEN / 2 - text_length / 2 - 1 + 3], text, text_length);
     }
     
 }

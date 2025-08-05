@@ -4,7 +4,7 @@
 
 int entityCollidingToTheRight(Engine *engine, int entity)
 {
-    for (int i = 0; i < NUMBER_OF_ENTITIES; i++)
+    for (int i = 1; i < NUMBER_OF_ENTITIES; i++)
     {
         
         if (i == entity)
@@ -21,7 +21,7 @@ int entityCollidingToTheRight(Engine *engine, int entity)
         )
         {
             engine->ecs.position.x[entity] = (engine->ecs.position.x[i] - engine->ecs.hitbox.width[i] / 2) - engine->ecs.hitbox.width[entity] / 2;
-            return 1;
+            return i;
         }
         
     }
@@ -31,7 +31,7 @@ int entityCollidingToTheRight(Engine *engine, int entity)
 
 int entityCollidingToTheLeft(Engine *engine, int entity)
 {
-    for (int i = 0; i < NUMBER_OF_ENTITIES; i++)
+    for (int i = 1; i < NUMBER_OF_ENTITIES; i++)
     {
         
         if (i == entity)
@@ -48,7 +48,7 @@ int entityCollidingToTheLeft(Engine *engine, int entity)
         )
         {
             engine->ecs.position.x[entity] = (engine->ecs.position.x[i] + engine->ecs.hitbox.width[i] / 2) + engine->ecs.hitbox.width[entity] / 2;
-            return 1;
+            return i;
         }
         
     }
@@ -58,7 +58,7 @@ int entityCollidingToTheLeft(Engine *engine, int entity)
 
 int entityCollidingFromtheTop(Engine *engine, int entity)
 {
-    for (int i = 0; i < NUMBER_OF_ENTITIES; i++)
+    for (int i = 1; i < NUMBER_OF_ENTITIES; i++)
     {
         
         if (i == entity)
@@ -75,7 +75,7 @@ int entityCollidingFromtheTop(Engine *engine, int entity)
         )
         {
             engine->ecs.position.y[entity] = (engine->ecs.position.y[i] + engine->ecs.hitbox.height[i] / 2) + engine->ecs.hitbox.height[entity] / 2;
-            return 1;
+            return i;
         }
         
     }
@@ -85,7 +85,7 @@ int entityCollidingFromtheTop(Engine *engine, int entity)
 
 int entityCollidingToTheBottom(Engine *engine, int entity)
 {
-    for (int i = 0; i < NUMBER_OF_ENTITIES; i++)
+    for (int i = 1; i < NUMBER_OF_ENTITIES; i++)
     {
         
         if (i == entity)
@@ -102,7 +102,7 @@ int entityCollidingToTheBottom(Engine *engine, int entity)
         )
         {
             engine->ecs.position.y[entity] = (engine->ecs.position.y[i] - engine->ecs.hitbox.height[i] / 2) - engine->ecs.hitbox.height[entity] / 2;
-            return 1;
+            return i;
         }
         
     }
