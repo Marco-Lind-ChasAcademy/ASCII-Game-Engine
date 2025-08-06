@@ -83,7 +83,7 @@ int main()
 
         if (player_lines_spoken > 0)
         {
-            enemy_lines_spoken = entityDrawDialogue(engine, ENEMY, "Nice to meet ya, I'm Bill!", 27, 0.05);
+            enemy_lines_spoken = entityDrawDialogue(engine, ENEMY, "Nice to meet ya, I'm Bill!", 26, 0.05);
         }
 
 

@@ -13,6 +13,8 @@ int entityDrawDialogue(Engine *engine, int entity, char *string, size_t length, 
 
     if (engine->ecs.position.y[entity] - engine->ecs.size.y[entity] / 2 - 2 < 0)
     {
+        engine->ecs.state.printing_index[entity] = 0;
+        
         return 0;
     }
     
