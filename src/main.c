@@ -70,7 +70,9 @@ int main()
 
         //enemyDraw(engine);
 
-        playerDrawAnimationCircling(engine, 1);
+        playerDrawAnimationCircling(engine, 0.5);
+
+        entityDrawDialogue(engine, PLAYER, "Hi, I'm Bob!", 12, 0.05, LEFT);
 
         stringDrawCentered(engine, "Marco's locker:", 16, 2);
         

@@ -4,6 +4,7 @@
 #include "GameLogic.h"
 
 int playerDrawAnimationCircling(Engine *engine, double time_between_animation_frames);
+int entityDrawDialogue(Engine *engine, int entity, char *string, size_t length, double time_between_chars, int orientation);
 
 static inline void stringDraw(Engine *engine, int entity, char *string, int map_y_index, int map_x_index)
 {
@@ -99,12 +100,12 @@ static inline int entityDrawAnimation(Engine *engine, int entity, double animati
 
     time_between_animation_frames = animation_duration_in_seconds / number_of_sprites_in_animation;
 
-    if (engine->time.since_animation_start < 0)
+    if (engine->time.since_animation_start[entity] < 0)
     {
-        engine->time.since_animation_start = 0;
+        engine->time.since_animation_start[entity] = 0;
     }
 
-    case_num = engine->time.since_animation_start / time_between_animation_frames;
+    case_num = engine->time.since_animation_start[entity] / time_between_animation_frames;
     
     if (case_num >= (number_of_sprites_in_animation))
     {
@@ -113,7 +114,7 @@ static inline int entityDrawAnimation(Engine *engine, int entity, double animati
     
     entityDrawFromRow(engine, entity, (case_num + 1) * engine->ecs.size.y[entity], sprite_sheet);
     
-    engine->time.since_animation_start += engine->time.delta;
+    engine->time.since_animation_start[entity] += engine->time.delta;
 
     if (case_num == number_of_sprites_in_animation - 1)
     {
@@ -143,12 +144,12 @@ static inline int entityDrawAndMoveAnimation(Engine *engine, int entity, double 
 
     time_between_animation_frames = animation_duration_in_seconds / number_of_sprites_in_animation;
 
-    if (engine->time.since_animation_start < 0)
+    if (engine->time.since_animation_start[entity] < 0)
     {
-        engine->time.since_animation_start = 0;
+        engine->time.since_animation_start[entity] = 0;
     }
 
-    case_num = engine->time.since_animation_start / time_between_animation_frames;
+    case_num = engine->time.since_animation_start[entity] / time_between_animation_frames;
     
     if (case_num >= (number_of_sprites_in_animation))
     {
@@ -157,7 +158,7 @@ static inline int entityDrawAndMoveAnimation(Engine *engine, int entity, double 
     
     entityDrawAndMove(engine, entity, (case_num + 1) * engine->ecs.size.y[entity], sprite_sheet);
     
-    engine->time.since_animation_start += engine->time.delta;
+    engine->time.since_animation_start[entity] += engine->time.delta;
 
     if (case_num == number_of_sprites_in_animation - 1)
     {
@@ -185,5 +186,80 @@ static inline void stringDrawCentered(Engine *engine, char *text, size_t text_le
     }
     
 }
+
+static inline int stringDrawRolling(Engine *engine, double *accumulated_time, char *string, size_t length, int *index, int x, int y, double time_between_chars)
+{
+    *accumulated_time += engine->time.delta;
+    
+    if (*index > 0)
+    {
+        switch (string[*index - 1])
+        {
+        case '.':
+            time_between_chars *= 20;
+        
+            break;
+        
+        case '!':
+            time_between_chars *= 20;
+        
+            break;
+        
+        case '?':
+            time_between_chars *= 20;
+        
+            break;
+
+        case ':':
+            time_between_chars *= 15;
+        
+            break;
+        
+        
+        case ';':
+            time_between_chars *= 15;
+        
+            break;
+        
+        
+        case ',':
+            time_between_chars *= 10;
+        
+            break;
+        
+        default:
+            break;
+        }
+
+    }
+    
+    memcpy(&engine->buffer.frame.grid[y][x], string, *index);
+
+    while (*accumulated_time >= time_between_chars && *index <= length)
+    {
+        if (string[*index] == ' ')
+        {
+            *index += 2;
+        }
+        else
+        {
+            *index += 1;
+        }
+        
+        memcpy(&engine->buffer.frame.grid[y][x], string, *index);
+
+        *accumulated_time -= time_between_chars;
+    }
+
+    if (*index > length)
+    {
+        *index = 0;
+        return 1;
+    }
+
+    return 0;
+}
+
+
 
 #endif

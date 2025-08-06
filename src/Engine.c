@@ -71,7 +71,10 @@ Engine *engineInit(size_t engine_size)
     engine->ecs.size.y_sprite_sheet[PLAYER] = HEGIHT_PLAYER_SPRITE_SHEET;
     engine->ecs.size.y_sprite_sheet[ENEMY] = HEIGHT_ENEMY_SPRITE_SHEET;
 
-    engine->time.since_animation_start = 0;
+    engine->time.since_animation_start[PLAYER] = 0;
+    engine->time.dialogue_accumulated_time[PLAYER] = 0;
+
+    engine->ecs.state.printing_index[PLAYER] = 0;
 
 
     engine->buffer.frame.newline = '\n';

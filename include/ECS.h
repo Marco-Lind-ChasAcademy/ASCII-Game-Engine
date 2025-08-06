@@ -14,6 +14,12 @@ typedef enum
     NO_ACTION,
     CIRCLING
 } ActionID;
+typedef enum
+{
+    LEFT,
+    CENTER,
+    RIGHT
+} TextOrientation;
 
 typedef struct
 {
@@ -47,6 +53,7 @@ typedef struct
 {
     int action[NUMBER_OF_ENTITIES];
     int animation[NUMBER_OF_ENTITIES];
+    int printing_index[NUMBER_OF_ENTITIES];
 } StateSystem;
 
 
@@ -68,7 +75,9 @@ typedef struct
 typedef struct
 {
     LARGE_INTEGER current, last, frequency;
-    double delta, frame, since_animation_start;
+    double delta, frame;
+    double since_animation_start[NUMBER_OF_ENTITIES];
+    double dialogue_accumulated_time[NUMBER_OF_ENTITIES];
 } TimeSystem;
 
 typedef union
