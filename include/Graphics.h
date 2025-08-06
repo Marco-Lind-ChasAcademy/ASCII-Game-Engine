@@ -4,7 +4,7 @@
 #include "GameLogic.h"
 
 int playerDrawAnimationCircling(Engine *engine, double time_between_animation_frames);
-int entityDrawDialogue(Engine *engine, int entity, char *string, size_t length, double time_between_chars, int orientation);
+int entityDrawDialogue(Engine *engine, int entity, char *string, size_t length, double time_between_chars);
 
 static inline void stringDraw(Engine *engine, int entity, char *string, int map_y_index, int map_x_index)
 {

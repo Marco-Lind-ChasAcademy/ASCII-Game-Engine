@@ -51,10 +51,14 @@ int main()
 
     timeSystemInit(engine);
 
+    int player_lines_spoken = 0;
+    int enemy_lines_spoken = 1;
+
 
     // Game loop
     while (!keyWasPressed(VK_ESCAPE))
     {
+
         timeDeltaCalculate(engine);
 
         if (engine->time.delta < engine->time.frame)
@@ -65,14 +69,23 @@ int main()
         engine->time.last = engine->time.current;
         
         mapCopyToFrameBuffer(engine);
-
+        
         entityDrawAnimation(engine, ENEMY, 8, NUMBER_OF_ENEMY_BLINKING_SPRITES, engine->buffer.sprite.enemy.flat);
 
         //enemyDraw(engine);
 
         playerDrawAnimationCircling(engine, 0.5);
 
-        entityDrawDialogue(engine, PLAYER, "Hi, I'm Bob!", 12, 0.05, LEFT);
+        if (enemy_lines_spoken > 0)
+        {
+            player_lines_spoken = entityDrawDialogue(engine, PLAYER, "Hi, I'm Bob!", 12, 0.05);
+        }
+
+        if (player_lines_spoken > 0)
+        {
+            enemy_lines_spoken = entityDrawDialogue(engine, ENEMY, "Nice to meet ya, I'm Bill!", 27, 0.05);
+        }
+
 
         stringDrawCentered(engine, "Marco's locker:", 16, 2);
         
