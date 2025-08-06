@@ -50,7 +50,7 @@ Engine *engineInit(size_t engine_size)
     engine->time.frame = TIME_FRAME;
 
 
-    engine->ecs.position.x[PLAYER] = 36;
+    engine->ecs.position.x[PLAYER] = 39;
     engine->ecs.position.x[ENEMY] = POSITION_X_ENEMY;
     engine->ecs.position.y[PLAYER] = 10;
     engine->ecs.position.y[ENEMY] = POSITION_Y_ENEMY;

@@ -190,40 +190,45 @@ static inline void stringDrawCentered(Engine *engine, char *text, size_t text_le
 static inline int stringDrawRolling(Engine *engine, double *accumulated_time, char *string, size_t length, int *index, int x, int y, double time_between_chars)
 {
     *accumulated_time += engine->time.delta;
+
+    if (*accumulated_time >= time_between_chars * (DIALOGUE_LONG_PAUSE + 1))
+    {
+        *accumulated_time = TIME_FRAME;
+    }
     
     if (*index > 0)
     {
         switch (string[*index - 1])
         {
         case '.':
-            time_between_chars *= 20;
+            time_between_chars *= DIALOGUE_LONG_PAUSE;
         
             break;
         
         case '!':
-            time_between_chars *= 20;
+            time_between_chars *= DIALOGUE_LONG_PAUSE;
         
             break;
         
         case '?':
-            time_between_chars *= 20;
+            time_between_chars *= DIALOGUE_LONG_PAUSE;
         
             break;
 
         case ':':
-            time_between_chars *= 15;
+            time_between_chars *= DIALOGUE_MEDIUM_PAUSE;
         
             break;
         
         
         case ';':
-            time_between_chars *= 15;
+            time_between_chars *= DIALOGUE_MEDIUM_PAUSE;
         
             break;
         
         
         case ',':
-            time_between_chars *= 10;
+            time_between_chars *= DIALOGUE_SHORT_PAUSE;
         
             break;
         
