@@ -20,3 +20,19 @@ Whether you’re animating little '@' dudes, building dungeons out of `#`, or ju
 Because sometimes pixel art is too high-res.  
 Because writing in pure C is fun.  
 Because making games in the terminal just feels good.
+
+## Status
+This is a personal, inspiration-driven project.
+Sometimes I’ll hack on it for hours. Sometimes it naps for weeks.
+It’s not a full-blown engine (yet?), but it’s fast, lean, and ready to play.
+
+## License
+Released under the GNU General Public License v2.0.
+You can use it, share it, and change it — just keep it open.
+See the LICENSE file if you enjoy reading legalese.
+
+## Build
+
+```bash
+gcc -o game main.c src/*.c
+./game
