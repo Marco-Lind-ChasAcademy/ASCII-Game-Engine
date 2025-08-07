@@ -31,8 +31,15 @@ Released under the GNU General Public License v2.0.
 You can use it, share it, and change it — just keep it open.
 See the LICENSE file if you enjoy reading legalese.
 
+## Note:
+The engine (yep, that’s game.exe) is meant to be run in fullscreen with a font size of 33 — otherwise things might look a bit... weird.
+
+I’ve included a pre-built game.exe so even folks without a C compiler can jump in and give it a spin.
+Fair warning: since it’s unsigned, your antivirus might throw a tantrum.
+If you’d rather not deal with that, just compile it yourself — no drama, no red flags.
+
 ## Build
 
 ```bash
-gcc -o game main.c src/*.c
+gcc -o game src/*.c
 ./game
