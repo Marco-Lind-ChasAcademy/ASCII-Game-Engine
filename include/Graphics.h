@@ -201,33 +201,84 @@ static inline int stringDrawRolling(Engine *engine, double *accumulated_time, ch
         switch (string[*index - 1])
         {
         case '.':
+            if (*index < length && string[*index] == '\"')
+            {
+                break;
+            }
+            
             time_between_chars *= DIALOGUE_LONG_PAUSE;
         
             break;
         
         case '!':
+            if (*index < length && string[*index] == '\"')
+            {
+                break;
+            }
+            
+            time_between_chars *= DIALOGUE_LONG_PAUSE;
+        
+            break;
+            
+        case '\"':
+            if (*index < 2)
+            {
+                break;
+            }
+            
             time_between_chars *= DIALOGUE_LONG_PAUSE;
         
             break;
         
         case '?':
+            if (*index < length && string[*index] == '\"')
+            {
+                break;
+            }
+            
             time_between_chars *= DIALOGUE_LONG_PAUSE;
         
             break;
 
         case ':':
+            if (*index < length && string[*index] == '\"')
+            {
+                break;
+            }
+            
             time_between_chars *= DIALOGUE_MEDIUM_PAUSE;
         
             break;
         
         
         case ';':
+            if (*index < length && string[*index] == '\"')
+            {
+                break;
+            }
+            
             time_between_chars *= DIALOGUE_MEDIUM_PAUSE;
         
             break;
         
         
         case ',':
+            if (*index < length && string[*index] == '\"')
+            {
+                break;
+            }
+            
+            time_between_chars *= DIALOGUE_SHORT_PAUSE;
+        
+            break;
+        
+        
+        case '-':
+            if (*index < length && string[*index] == '\"')
+            {
+                break;
+            }
+            
             time_between_chars *= DIALOGUE_SHORT_PAUSE;
         
             break;
