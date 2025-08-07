@@ -1,9 +1,9 @@
-# 🕹️ ascii-engine  
+# 🕹️ ASCII-Game-Engine  
 *A tiny 2D ASCII game engine in pure C — for those who like their pixels made of text.*
 
 ## What's this?
 
-**ascii-engine** is my side project, written entirely in C, that brings 2D game dev into the world of text-mode. It’s sprite-based, fast, and practical — built for when inspiration strikes and I just want to make something *move*.
+**ASCII-Game-Engine** is my side project, written entirely in C, that brings 2D game dev into the world of text-mode. It’s sprite-based, fast, and practical — built for when inspiration strikes and I just want to make something *move*.
 
 Whether you’re animating little '@' dudes, building dungeons out of `#`, or just love the aesthetics of the terminal, this engine gives you the low-level tools to make it happen.
 
